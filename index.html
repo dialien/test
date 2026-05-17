@@ -3,88 +3,222 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>公司表單入口網站</title>
+  <title>Company Portal</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --bg: #070816;
+      --card: rgba(255,255,255,.08);
+      --line: rgba(255,255,255,.16);
+      --text: #f8fafc;
+      --muted: #a8b3cf;
+      --accent: #7c3aed;
+      --accent2: #06b6d4;
+    }
+
     body {
       min-height: 100vh;
-      font-family: "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
-      color: #5b3a45;
+      font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+      color: var(--text);
       background:
-        radial-gradient(circle at 15% 20%, rgba(255, 182, 193, .55), transparent 28%),
-        radial-gradient(circle at 85% 15%, rgba(255, 228, 235, .9), transparent 30%),
-        radial-gradient(circle at 50% 90%, rgba(255, 214, 224, .75), transparent 32%),
-        linear-gradient(135deg, #fff7fa, #ffe4ec 48%, #ffd6e3);
-      padding: 32px 20px;
+        radial-gradient(circle at var(--mx, 50%) var(--my, 20%), rgba(124,58,237,.35), transparent 25%),
+        radial-gradient(circle at 15% 85%, rgba(6,182,212,.22), transparent 30%),
+        radial-gradient(circle at 85% 20%, rgba(236,72,153,.18), transparent 28%),
+        linear-gradient(135deg, #050611, #0f172a 55%, #111827);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, black, transparent 80%);
+      pointer-events: none;
     }
 
     .page {
-      width: min(1080px, 100%);
+      width: min(1180px, calc(100% - 40px));
       margin: 0 auto;
+      padding: 32px 0 48px;
       position: relative;
+      z-index: 1;
     }
 
-    .lang-switch {
+    nav {
       display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-bottom: 46px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 72px;
     }
 
-    .lang-switch button {
-      border: 1px solid rgba(190, 90, 120, .25);
-      background: rgba(255,255,255,.55);
-      color: #9d4565;
-      padding: 9px 16px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 38px rgba(124,58,237,.55);
+      display: grid;
+      place-items: center;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      padding: 10px 15px;
       border-radius: 999px;
       cursor: pointer;
-      font-weight: 700;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(16px);
+      transition: .25s ease;
+      font-weight: 800;
     }
 
-    .lang-switch button.active {
-      background: #d86f93;
-      color: white;
-      box-shadow: 0 10px 30px rgba(216,111,147,.28);
+    button:hover, button.active {
+      background: rgba(255,255,255,.18);
+      transform: translateY(-2px);
     }
 
-    header {
-      text-align: center;
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 42px;
+      align-items: center;
       margin-bottom: 46px;
     }
 
     .badge {
-      display: inline-block;
-      padding: 8px 18px;
+      display: inline-flex;
+      gap: 8px;
+      padding: 9px 16px;
+      border: 1px solid var(--line);
       border-radius: 999px;
-      background: rgba(255,255,255,.55);
-      border: 1px solid rgba(190, 90, 120, .18);
-      color: #b85b7b;
+      background: rgba(255,255,255,.08);
+      color: #c4b5fd;
+      margin-bottom: 24px;
+      backdrop-filter: blur(18px);
+      font-weight: 800;
       font-size: 13px;
-      letter-spacing: .14em;
-      margin-bottom: 22px;
-      backdrop-filter: blur(12px);
     }
 
     h1 {
-      font-size: clamp(38px, 6vw, 76px);
-      line-height: 1.05;
-      letter-spacing: -0.055em;
-      margin-bottom: 20px;
-      color: #7a334f;
+      font-size: clamp(44px, 7vw, 88px);
+      line-height: .95;
+      letter-spacing: -.07em;
+      margin-bottom: 24px;
     }
 
-    .gradient-text {
-      background: linear-gradient(90deg, #7a334f, #c95c83, #f08aaa);
+    .gradient {
+      background: linear-gradient(90deg, #fff, #a78bfa, #22d3ee, #f0abfc);
       -webkit-background-clip: text;
       color: transparent;
     }
 
     .subtitle {
+      max-width: 650px;
+      color: var(--muted);
       font-size: 18px;
-      line-height: 1.8;
-      color: #815264;
+      line-height: 1.85;
+      margin-bottom: 32px;
+    }
+
+    .searchbar {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.08);
+      border-radius: 24px;
+      backdrop-filter: blur(18px);
+      max-width: 620px;
+    }
+
+    .searchbar input {
+      flex: 1;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: white;
+      font-size: 16px;
+      padding: 10px;
+    }
+
+    .searchbar input::placeholder { color: #7f8aaa; }
+
+    .panel {
+      min-height: 360px;
+      border: 1px solid var(--line);
+      border-radius: 38px;
+      background: linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
+      backdrop-filter: blur(22px);
+      box-shadow: 0 34px 120px rgba(0,0,0,.35);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(124,58,237,.9), rgba(6,182,212,.75));
+      filter: blur(6px);
+      right: -70px;
+      top: -70px;
+      animation: float 7s ease-in-out infinite;
+    }
+
+    .stats {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 130px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 20px;
+      background: rgba(0,0,0,.18);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 34px;
+      margin-bottom: 8px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
     }
 
     .cards {
@@ -94,179 +228,246 @@
     }
 
     .card {
-      min-height: 260px;
-      padding: 28px;
-      border-radius: 34px;
+      min-height: 270px;
+      padding: 26px;
+      border-radius: 32px;
       text-decoration: none;
-      color: #683548;
-      background: rgba(255,255,255,.58);
-      border: 1px solid rgba(190, 90, 120, .18);
-      box-shadow: 0 24px 70px rgba(180, 80, 120, .18);
-      backdrop-filter: blur(18px);
-      transition: transform .35s ease, box-shadow .35s ease, background .35s ease;
+      color: white;
+      border: 1px solid var(--line);
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 24px 80px rgba(0,0,0,.25);
       position: relative;
       overflow: hidden;
+      transition: .35s ease;
+      transform-style: preserve-3d;
     }
 
     .card::before {
       content: "";
       position: absolute;
-      width: 190px;
-      height: 190px;
-      border-radius: 999px;
-      right: -70px;
-      top: -70px;
-      background: var(--accent);
-      opacity: .35;
-      filter: blur(4px);
-      transition: transform .35s ease, opacity .35s ease;
+      inset: -1px;
+      background: radial-gradient(circle at 30% 20%, var(--c), transparent 38%);
+      opacity: .45;
+      transition: .35s ease;
     }
 
     .card:hover {
-      transform: translateY(-9px);
-      background: rgba(255,255,255,.76);
-      box-shadow: 0 30px 90px rgba(180, 80, 120, .25);
+      transform: translateY(-10px) rotateX(3deg) rotateY(-3deg);
+      border-color: rgba(255,255,255,.35);
     }
 
-    .card:hover::before {
-      transform: scale(1.25);
-      opacity: .52;
+    .card:hover::before { opacity: .75; }
+
+    .icon, .card h2, .card p, .card .go {
+      position: relative;
+      z-index: 1;
     }
 
     .icon {
-      width: 58px;
-      height: 58px;
+      width: 62px;
+      height: 62px;
       display: grid;
       place-items: center;
-      border-radius: 21px;
-      background: rgba(255,255,255,.7);
+      font-size: 30px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.12);
       margin-bottom: 34px;
-      font-size: 28px;
-      position: relative;
-      z-index: 1;
-      box-shadow: inset 0 0 0 1px rgba(190,90,120,.12);
-    }
-
-    .card h2, .card p, .link {
-      position: relative;
-      z-index: 1;
     }
 
     .card h2 {
-      font-size: 24px;
+      font-size: 25px;
       margin-bottom: 12px;
-      color: #703249;
     }
 
     .card p {
-      color: #855568;
+      color: #d6def5;
       line-height: 1.75;
       margin-bottom: 28px;
     }
 
-    .link {
+    .go {
       position: absolute;
-      left: 28px;
-      bottom: 28px;
-      font-weight: 800;
-      color: #c6557a;
+      left: 26px;
+      bottom: 24px;
+      font-weight: 900;
+      color: #fff;
     }
 
     footer {
-      text-align: center;
       margin-top: 42px;
-      color: #9d6a7d;
+      color: #8390af;
+      text-align: center;
       font-size: 14px;
     }
 
-    [data-lang="en"] { display: none; }
+    [data-en] { display: none; }
+    body.en [data-zh] { display: none; }
+    body.en [data-en] { display: inline; }
+    body.en p[data-en], body.en div[data-en], body.en span[data-en] { display: block; }
 
-    body.en [data-lang="zh"] { display: none; }
-    body.en [data-lang="en"] { display: inline; }
-    body.en p[data-lang="en"],
-    body.en div[data-lang="en"],
-    body.en span[data-lang="en"] { display: block; }
+    .hide { display: none; }
 
-    @media (max-width: 850px) {
-      .cards { grid-template-columns: 1fr; }
-      .card { min-height: 220px; }
-      .lang-switch { justify-content: center; margin-bottom: 34px; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(24px) scale(1.08); }
+    }
+
+    @media (max-width: 900px) {
+      .hero, .cards { grid-template-columns: 1fr; }
+      nav { margin-bottom: 44px; }
+      .panel { display: none; }
     }
   </style>
 </head>
+
 <body>
   <main class="page">
-    <div class="lang-switch">
-      <button id="zhBtn" class="active" onclick="setLang('zh')">中文</button>
-      <button id="enBtn" onclick="setLang('en')">English</button>
-    </div>
+    <nav>
+      <div class="brand">
+        <div class="logo">✦</div>
+        PORTAL
+      </div>
+      <div class="actions">
+        <button id="zhBtn" class="active" onclick="setLang('zh')">中文</button>
+        <button id="enBtn" onclick="setLang('en')">EN</button>
+      </div>
+    </nav>
 
-    <header>
-      <div class="badge">INTERNAL PORTAL</div>
+    <section class="hero">
+      <div>
+        <div class="badge">
+          <span>●</span>
+          <span data-zh>智慧工作入口</span>
+          <span data-en>Smart Work Gateway</span>
+        </div>
 
-      <h1>
-        <span data-lang="zh" class="gradient-text">公司表單入口網站</span>
-        <span data-lang="en" class="gradient-text">Company Form Portal</span>
-      </h1>
+        <h1>
+          <span data-zh>讓流程變得<br><span class="gradient">清楚又高效</span></span>
+          <span data-en>Make workflows<br><span class="gradient">clear and powerful</span></span>
+        </h1>
 
-      <p class="subtitle" data-lang="zh">
-        請選擇要前往的系統。<br />
-        以更柔和、清晰的方式完成日常申請流程。
-      </p>
+        <p class="subtitle" data-zh>
+          整合常用申請、內部文件與系統入口。用更直覺、更專業的方式，快速抵達你需要的表單。
+        </p>
+        <p class="subtitle" data-en>
+          Access requests, internal documents, and system resources through one polished interactive portal.
+        </p>
 
-      <p class="subtitle" data-lang="en">
-        Please choose a system to continue.<br />
-        A softer and clearer way to complete daily request workflows.
-      </p>
-    </header>
+        <div class="searchbar">
+          <input id="searchInput" oninput="filterCards()" placeholder="搜尋表單 / 系統 / 關鍵字..." />
+          <button onclick="clearSearch()">Reset</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="orb"></div>
+        <div class="stats">
+          <div class="stat">
+            <strong>03</strong>
+            <span data-zh>目前入口</span>
+            <span data-en>Active entries</span>
+          </div>
+          <div class="stat">
+            <strong>24/7</strong>
+            <span data-zh>隨時可用</span>
+            <span data-en>Always available</span>
+          </div>
+          <div class="stat">
+            <strong>UX</strong>
+            <span data-zh>快速導覽</span>
+            <span data-en>Fast navigation</span>
+          </div>
+          <div class="stat">
+            <strong>∞</strong>
+            <span data-zh>可擴充表單</span>
+            <span data-en>Scalable forms</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="filters">
+      <button class="filter active" onclick="setFilter('all', this)">All</button>
+      <button class="filter" onclick="setFilter('it', this)">IT</button>
+      <button class="filter" onclick="setFilter('hr', this)">HR</button>
+      <button class="filter" onclick="setFilter('guide', this)">Guide</button>
+    </section>
 
     <section class="cards">
-      <a class="card" style="--accent:#ff9fbd;" href="你的GoogleForm1" target="_blank">
+      <a class="card" data-type="it" data-keywords="it equipment mac address device access 設備 權限" style="--c: rgba(124,58,237,.75);" href="你的GoogleForm1" target="_blank">
         <div class="icon">💻</div>
-        <h2 data-lang="zh">IT 設備申請</h2>
-        <h2 data-lang="en">IT Equipment Request</h2>
-        <p data-lang="zh">設備需求、MAC Address、權限與相關資訊申請。</p>
-        <p data-lang="en">Submit device, MAC address, access, and IT-related requests.</p>
-        <span class="link" data-lang="zh">前往申請 →</span>
-        <span class="link" data-lang="en">Apply Now →</span>
+        <h2 data-zh>IT 設備申請</h2>
+        <h2 data-en>IT Equipment Request</h2>
+        <p data-zh>申請設備、MAC Address、權限設定與 IT 相關支援。</p>
+        <p data-en>Request devices, MAC address registration, access setup, and IT support.</p>
+        <span class="go" data-zh>啟動流程 →</span>
+        <span class="go" data-en>Launch Flow →</span>
       </a>
 
-      <a class="card" style="--accent:#ffc2d4;" href="你的GoogleForm2" target="_blank">
+      <a class="card" data-type="hr" data-keywords="hr human resource employee document 人事 員工 文件" style="--c: rgba(236,72,153,.7);" href="你的GoogleForm2" target="_blank">
         <div class="icon">👥</div>
-        <h2 data-lang="zh">HR 人事表單</h2>
-        <h2 data-lang="en">HR Forms</h2>
-        <p data-lang="zh">人事資料、文件上傳、員工資訊與行政流程。</p>
-        <p data-lang="en">Manage HR information, document uploads, and admin workflows.</p>
-        <span class="link" data-lang="zh">前往填寫 →</span>
-        <span class="link" data-lang="en">Fill Out →</span>
+        <h2 data-zh>HR 人事表單</h2>
+        <h2 data-en>HR Forms</h2>
+        <p data-zh>人事資料、文件上傳、員工資訊與行政流程集中入口。</p>
+        <p data-en>Manage HR information, documents, employee data, and admin workflows.</p>
+        <span class="go" data-zh>前往填寫 →</span>
+        <span class="go" data-en>Fill Out →</span>
       </a>
 
-      <a class="card" style="--accent:#ffd6e7;" href="你的Notion說明頁" target="_blank">
+      <a class="card" data-type="guide" data-keywords="guide sop faq notion instruction 說明 教學 常見問題" style="--c: rgba(6,182,212,.72);" href="你的Notion說明頁" target="_blank">
         <div class="icon">📘</div>
-        <h2 data-lang="zh">系統說明</h2>
-        <h2 data-lang="en">System Guide</h2>
-        <p data-lang="zh">查看操作教學、SOP、常見問題與內部規範。</p>
-        <p data-lang="en">View guides, SOPs, FAQs, and internal instructions.</p>
-        <span class="link" data-lang="zh">查看說明 →</span>
-        <span class="link" data-lang="en">View Guide →</span>
+        <h2 data-zh>系統說明</h2>
+        <h2 data-en>System Guide</h2>
+        <p data-zh>查看 SOP、操作教學、常見問題與內部規範。</p>
+        <p data-en>View SOPs, tutorials, FAQs, and internal instructions.</p>
+        <span class="go" data-zh>查看說明 →</span>
+        <span class="go" data-en>View Guide →</span>
       </a>
     </section>
 
     <footer>
-      <span data-lang="zh">© 2026 Company Portal. 柔和、清晰、有效率。</span>
-      <span data-lang="en">© 2026 Company Portal. Soft, clear, and efficient.</span>
+      <span data-zh>© 2026 Company Portal. Designed for speed, clarity, and flow.</span>
+      <span data-en>© 2026 Company Portal. Designed for speed, clarity, and flow.</span>
     </footer>
   </main>
 
   <script>
+    let currentFilter = "all";
+
+    document.addEventListener("mousemove", (e) => {
+      document.body.style.setProperty("--mx", e.clientX + "px");
+      document.body.style.setProperty("--my", e.clientY + "px");
+    });
+
     function setLang(lang) {
       document.body.classList.toggle("en", lang === "en");
       document.documentElement.lang = lang === "en" ? "en" : "zh-Hant";
-
-      document.getElementById("zhBtn").classList.toggle("active", lang === "zh");
-      document.getElementById("enBtn").classList.toggle("active", lang === "en");
-
+      zhBtn.classList.toggle("active", lang === "zh");
+      enBtn.classList.toggle("active", lang === "en");
       localStorage.setItem("portalLang", lang);
+    }
+
+    function setFilter(type, btn) {
+      currentFilter = type;
+      document.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      filterCards();
+    }
+
+    function filterCards() {
+      const q = searchInput.value.toLowerCase().trim();
+      document.querySelectorAll(".card").forEach(card => {
+        const typeMatch = currentFilter === "all" || card.dataset.type === currentFilter;
+        const text = (card.innerText + " " + card.dataset.keywords).toLowerCase();
+        const searchMatch = !q || text.includes(q);
+        card.classList.toggle("hide", !(typeMatch && searchMatch));
+      });
+    }
+
+    function clearSearch() {
+      searchInput.value = "";
+      filterCards();
     }
 
     setLang(localStorage.getItem("portalLang") || "zh");
